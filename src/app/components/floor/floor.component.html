@@ -1,0 +1,23 @@
+<div class="col-md-12" *ngIf="floor">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+      <h1>{{floor.code}} <small>{{floor.roomList.length}} camere</small> </h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          </div>
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+          <span class="fa fa-calendar"></span>
+          This week
+        </button>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6" *ngFor="let room of floor.roomList">
+          <a href="" routerLink="/room/{{room.id}}">  
+            <div class="box d-flex align-items-center"  [ngClass]="{'active':isActive(room.status),'inactive':!isActive(room.status) }">    
+                  <div class="box-title text-center w-100"><h3> {{room.code}} - status:{{room.status}}    </h3> </div>
+                
+            </div>             
+          </a>  
+      </div>
+    </div>
+  </div>

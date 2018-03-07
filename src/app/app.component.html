@@ -1,0 +1,19 @@
+<app-navbar *ngIf="!isLoginPage()"></app-navbar>
+<div class="container-fluid" *ngIf="!isLoginPage(); else noDisplay">
+  
+  <div class="row">
+    <app-dashbar ></app-dashbar>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <div class="fixed-top m-3">
+          <flash-messages></flash-messages>
+      </div>
+      
+    <router-outlet></router-outlet>
+  </main>
+  </div>
+</div>
+<ng-template #noDisplay >
+    <flash-messages></flash-messages>
+  <router-outlet [hidden]="isLoginPage()"></router-outlet>
+</ng-template>

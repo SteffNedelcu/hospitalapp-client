@@ -1,0 +1,67 @@
+<div class="col-md-12" *ngIf="pacient">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1>{{ pacient.lastName }} {{ pacient.firstName }}</h1>
+
+    </div>
+
+  <div class="headingInfo row">
+    <div class="col-md-6 heading-col">
+        <p > <b>CNP:</b> {{ pacient.cnp }} </p>
+        <p > <b>Sex:</b> {{ pacient.sex }} </p>
+        <p > <b>Data Nasterii:</b> {{ pacient.birthdate }} </p>
+        <p > <b>Email:</b> {{ pacient.email }} </p>
+        <p > <b>Nr. Telefon:</b> {{ pacient.phone }} </p>
+        <p > <b>Ocupatie:</b> {{ pacient.job }} </p>      
+        <p > <b>Asigurat:</b> {{ medicalInsurance() ?'Da': 'Nu' }} </p>
+    </div>
+    <div class="col-md-6 heading-col">
+        <p > <b>Grupa Sangvina:</b> {{ pacient.bloodType }} </p>
+        <p > <b>Boli cronice:</b> {{ getListText(pacient.chronicDiseaseList) }} </p>
+        <p > <b>Alergii:</b> {{ getListText(pacient.allergicDiseaseList) }} </p>
+        <p > <b>Vaccinuri:</b> {{ getListText(pacient.vaccineList) }} </p>
+    </div>
+    
+  </div>
+  <hr>
+  <h2>Fise mediale</h2>
+  <div *ngIf="medicalForms" class="row mt-3">
+    <div *ngIf="medicalForms.length > 0; else noMedicalForms" class="col-md-12">
+        <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cod</th>
+                <th>Spital</th>
+                <th>data</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let medicalForm of medicalForms">
+                <th scope="row">{{medicalForm.id}}</th>
+                <td>{{medicalForm.code}}</td>
+                <td>{{medicalForm.hospitalInfo}}</td>
+                <td>{{medicalForm.dateCheckUp}}</td>
+                <td><a routerLink="/fisa-medicala/{{medicalForm.id}}" class="btn btn-primary"> <i class="fa fa-eye"></i> Vezi</a></td>
+              </tr>
+
+            </tbody>
+          </table>
+
+    </div>
+    <ng-template #noMedicalForms>
+      <h4>Nu exista fise medicale in sistem</h4>
+    </ng-template>
+  </div>
+  <div *ngIf="activeMedicalForms != null" class="row margin-top-25">        
+    <div *ngIf="activeMedicalForms == 0; else viewMedicalForm" class="row text-center">
+      <button (click)="addMedicalForm()" class="btn btn-primary btn-lg">Adauga Fisa Medicala</button>
+    </div>
+    <ng-template #viewMedicalForm>
+      <div class="container-fluid text-center">
+          <a routerLink="/fisa-medicala/{{activeMedicalForms}}" class="btn btn-primary btn-lg">Vezi Fisa Medicala</a>
+      </div>
+        
+      </ng-template>
+  </div>
+</div>

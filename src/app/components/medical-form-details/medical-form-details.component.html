@@ -1,0 +1,388 @@
+<div class="col-md-12" *ngIf="medicalForm">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1>Fisa Medicala : {{ medicalForm.id }}</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                      <a class="btn btn-sm btn-outline-secondary" routerLink="/fisa-medicala/{{id}}/vital-signs">  <span class="fa fa-bar-chart"></span> Curba Febrila</a>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                      <span class="fa fa-calendar"></span>
+                      This week
+                    </button>
+                  </div>
+    </div>
+  
+    <div class="col-md-12" *ngIf="pacient">
+        <div class="headingInfo row">
+            <div class="col-md-6 heading-col">
+                <p > <b>Nume:</b> {{ pacient.lastName }} </p>
+                <p > <b>Prenume:</b> {{ pacient.firstName }} </p>
+                <p > <b>CNP:</b> {{ pacient.cnp }} </p>
+                <p > <b>Sex:</b> {{ pacient.sex }} </p>
+                <p > <b>Data Nasterii:</b> {{ pacient.birthdate }} </p>
+                <p > <b>Email:</b> {{ pacient.email }} </p>
+                <p > <b>Nr. Telefon:</b> {{ pacient.phone }} </p>
+                <p > <b>Ocupatie:</b> {{ pacient.job }} </p>      
+                <p > <b>Asigurat:</b> {{ medicalInsurance() ?'Da': 'Nu' }} </p>
+            </div>
+            <div class="col-md-6 heading-col">
+                <p > <b>Grupa Sangvina:</b> {{ pacient.bloodType }} </p>
+                <p > <b>Boli cronice:</b> {{ getListText(pacient.chronicDiseaseList) }} </p>
+                <p > <b>Alergii:</b> {{ getListText(pacient.allergicDiseaseList) }} </p>
+                <p > <b>Vaccinuri:</b> {{ getListText(pacient.vaccineList) }} </p>
+            </div>
+            
+        </div>
+    </div>
+    <hr>
+    <form action="" (submit)="edit()">
+
+        <div class="row" *ngIf="medicalForm.status ==1;">
+            <div class="col-md-12">
+                    <h3>Diagnostic prezumtiv</h3>
+                <div class="form-group" *ngIf="medicalForm.status == 1; else displayDiagnosticPrezumtiv">
+                    <textarea [(ngModel)]="medicalForm.observationsCheckUp"  (blur)="edit()" class="form-control" name="observationsCheckUp" id="observationsCheckUp" cols="100" rows="10"></textarea>
+                </div>
+                <ng-template #displayDiagnosticPrezumtiv>
+                    <div>
+                        {{medicalForm.observationsCheckUp}}
+                        <input type="hidden" [(ngModel)]="medicalForm.observationsCheckUp"   name="observationsCheckUp" value="observationsCheckUp">
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <div class="row" *ngIf="medicalForm.status ==1;">
+            <div class="col-md-12">
+                <h3>Observatii</h3>
+                <div class="form-group" >
+                    <textarea [(ngModel)]="medicalForm.observationsCheckIn" class="form-control" (blur)="edit()" name="observationsCheckIn" id="observationsCheckIn" cols="100" rows="10"></textarea>
+                </div>
+
+            </div>
+         
+            
+            
+        </div>
+
+    </form>
+    <hr>
+    <div class="row" *ngIf="medicalForm.status ==1;">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h3>Pat</h3>
+                <div class="actions">
+                    <a (click)="showAddBed()"> <i class="fa fa-plus"></i> </a>
+                </div>
+            </div> 
+            <form action=""  (submit)="addBed()">     
+            <div class="row" *ngIf="addBed">     
+                    <div class="form-row col-md-12">                                 
+                        <div class="form-group col-md-4">
+                            <label for="selectFloor">Etaj</label>
+                            <select id="selectFloor"  class="form-control" (change)="onChangeFloor($event.target.value)">
+                                <option>Etaj</option>
+                                <option *ngFor="let floor of floors" value="{{floor.code}}">{{floor.code}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="selectFloor">Camera</label>
+                            <select id="selectFloor"  class="form-control" (change)="onChangeRoom($event.target.value)">
+                                <option>Camera</option>
+                                <option *ngFor="let room of rooms" value="{{room.code}}">{{room.code}} {{room.sex}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="selectFloor">Pat</label>
+                            <select id="selectFloor"  class="form-control" (change)="onChangeBed($event.target.value)">
+                                <option>Pat</option>
+                                <option *ngFor="let bed of beds" value="{{bed.code}}">{{bed.code}} {{bed.status}}</option>
+                            </select>
+                        </div>                         
+                    </div>                  
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-md-12" *ngIf="activeBed">
+                        {{activeBed.pathToBed}}
+                </div>                      
+            </div>                    
+        </div>
+    </div>
+    <div class="row margin-top-25">
+        <div class="col-md-12">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                        <h3>Diagnostice</h3>
+                        <div class="actions">
+                                <a (click)="showAddDiagnostic()"> <i class="fa fa-plus"></i> </a>
+                    </div>
+                </div>
+                <div class="row" *ngIf="addDiagnosticForm">                
+                        <form action=""  (submit)="addDiagnostic()">   
+                    <div class="col-md-12">
+                        <h5>Adauga Diagnostic</h5>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="row ">
+                            <div class="form-group col-md-3">
+                                <div class="row ">
+                                    <label for="codDiagnostic" class="col-sm-7 col-form-label">Cod Diagnostic</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" [(ngModel)]="newDiagnostic.codeCIM" name="codeCIM" id="codDiagnostic" placeholder="Cod">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="row ">
+                                    <label for="numeDiagnostic" class="col-sm-5 col-form-label">Nume Diagnostic</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" [(ngModel)]="newDiagnostic.name" name="name" id="numeDiagnostic" placeholder="Nume Diagnostic">
+                                    </div>    
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="row">
+                                    <div class="form-check form-check-inline col">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="newDiagnostic.cronical" name="cronical" id="inlineRadio1" value="1">
+                                        <label class="form-check-label" for="inlineRadio1">cronic</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="newDiagnostic.allergy" name="allergy" id="inlineRadio2" value="1">
+                                        <label class="form-check-label" for="inlineRadio2">alergie</label>
+                                    </div>
+                                </div>     
+                            </div>
+                            <div class="form-group col-md-1">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-primary">Set</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="row">
+                <div *ngIf="medicalForm.diagnosticList.length > 0; else noDiagnostics" class="col-md-12">
+                    <table class="table table-sm table-hover">  
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cod CIM</th>
+                                <th>Nume</th>
+                                <th>Data</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let diagnostic of medicalForm.diagnosticList">
+                                <td scope="row">{{diagnostic.code}}</td>
+                                <td>{{diagnostic.codeCIM}}</td>
+                                <td>{{diagnostic.name}}</td>
+                                <td>{{diagnostic.date}}</td>
+                                <td align="right"><button class="btn btn-primary" (click)="deleteDiagnostic(diagnostic.id )"> <i class="fa fa-trash"></i></button></td>
+                            </tr>
+        
+                        </tbody>
+                    </table>      
+                </div>
+                <ng-template #noDiagnostics class="col-md-12">
+                    Nu au fost adaugat nici un diagnostic
+                </ng-template>
+            </div>
+
+                
+        </div>
+        
+    </div>
+    <hr>
+    <div class="row margin-top-25">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h3>Tratamente</h3>
+                    <div class="actions">
+                        <a (click)="showAddTreatment()"> <i class="fa fa-plus"></i> </a>
+                    </div>
+                </div>
+            <div class="row" *ngIf="addTreatmentForm">
+                <form action=""  (submit)="addTreatment()">   
+                    <div class="col-md-12 ">
+                            <h4>Adauga Tratament</h4>                        
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <div class="row ">
+                                    <label for="codTratament" class="col-sm-5 col-form-label">Cod CIM</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" [(ngModel)]="newTreatment.codeCIM" name="codeCIM" id="codTratament" placeholder="Cod">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <div class="row ">
+                                    <label for="numeTratament" class="col-sm-5 col-form-label">Nume Tratament</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" [(ngModel)]="newTreatment.name" name="name" id="numeTratament" placeholder="Nume Tratament">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                    <div class="row ">
+                                        <label for="frecventaTratament" class="col-sm-5 col-form-label">Frecventa (/zi)</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" [(ngModel)]="newTreatment.frequency" name="frequency" id="frecventaTratament" placeholder="2">
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="form-group col-md-1">
+                                    <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" [(ngModel)]="newTreatment.vaccine"  name="vaccine" id="vaccin" value="1">
+                                            <label class="form-check-label" for="vaccin">
+                                                    vaccin
+                                            </label>
+                                            </div>
+                                
+                            </div>
+                            <div class="form-group col-md-1">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-primary">Set</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div  *ngIf="medicalForm.treatmentList.length > 0; else noTreatments" class="col-md-12">
+                        <table class="table table-sm table-hover">  
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cod CIM</th>
+                                    <th>Nume</th>
+                                    <th>Data</th>
+                                    <th>Frecventa</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let treatment of medicalForm.treatmentList" >
+                                    <td scope="row">{{treatment.code}}</td>
+                                    <td>{{treatment.codeCIM}}</td>
+                                    <td>{{treatment.name}}</td>
+                                    <td>{{treatment.date}}</td>
+                                    <td>{{treatment.frequency}} pe zi</td>
+                                    <td>{{treatment.status}}</td>
+                                    <td align="right">
+                                        <button class="btn btn-primary" [ngClass]="{'disabled':!isActive(treatment)}" [disabled]="!isActive(treatment)" (click)="adminstrateTreatment(treatment)"> <i class="fa fa-plus"></i></button>
+                                        <button class="btn btn-primary" (click)="changeStatusTreatment(treatment)"> <i class="fa fa-stop"></i></button>
+                                        <button class="btn btn-primary" (click)="deleteTreatment(treatment)"> <i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>   
+                    </div>
+                    <ng-template #noTreatments class="col-md-12">
+                        Nu a fost prescris nici un tratament
+                    </ng-template>   
+            </div>
+             
+        </div>               
+            
+    </div>
+    <hr>
+    <div class="row margin-top-25">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h3>Investigatii</h3>
+                    <div class="actions">
+                        <a (click)="showAddInvestigation()"> <i class="fa fa-plus"></i> </a>
+                    </div>
+                </div>
+            <div class="row" *ngIf="addInvestigationForm">
+                <form action=""  (submit)="addInvestigation()"> 
+                    <div class="col-md-12 ">
+                            <h4>Solicita investigatie</h4>                        
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <div class="row ">
+                                    <label for="codeInvestination" class="col-sm-5 col-form-label">Cod</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" [(ngModel)]="newInvestigation.codeCIM" name="codeCIM" id="codeInvestination" placeholder="Cod">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="row ">
+                                    <label for="numeInvestigatie" class="col-sm-5 col-form-label">Nume Investigatie</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" [(ngModel)]="newInvestigation.name" name="name" id="numeInvestigatie" placeholder="Nume Investigatie">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="row ">
+                                    <label for="observations" class="col-sm-4 col-form-label">Observatii</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" [(ngModel)]="newInvestigation.observations" name="observations" id="observations" placeholder="observations">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-primary">Set</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div *ngIf="medicalForm.investigationList.length > 0; else noInvestigation" class="col-md-12">
+                    <table class="table table-sm table-hover">  
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cod CIM</th>
+                                <th>Nume</th>
+                                <th>Data</th>
+                                <th>Frecventa</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let investigation of medicalForm.investigationList">
+                                <td scope="row">{{investigation.code}}</td>
+                                <td>{{investigation.codeCIM}}</td>
+                                <td>{{investigation.name}}</td>
+                                <td>{{investigation.dateRequest}}</td>
+                                <td>{{investigation.status}} </td>
+                                <td align="right"><button class="btn btn-primary" *ngIf="investigation.status === 1"> <i class="fa fa-trash"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>  
+        
+                </div>
+            </div>
+
+            <ng-template #noInvestigation class="col-md-12">
+                Nu a fost facuta nici o investigatie
+            </ng-template>             
+        </div>              
+                
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <div class="form-group" *ngIf="medicalForm.status ==1;">
+            <button class="btn btn-default btn-lg btn-block">Inchide fisa</button>
+        </div>
+        <div class="form-group " *ngIf="medicalForm.status ==1;">
+                <button class="btn btn-success btn-lg btn-block">Interneaza</button>
+            </div>
+        <div class="form-group" *ngIf="medicalForm.status ==2;">
+            <button class="btn btn-default btn-lg btn-block">Externeaza</button>
+        </div>
+    </div>      
+</div>

@@ -1,0 +1,13 @@
+<form class="form-signin" (ngSubmit)="onSubmit()" [hidden]="loggedIn">       
+  <h2 class="clean-font">Please login</h2>
+
+  <input type="text" class="form-control" name="diagnostic.observations" [(ngModel)]="diagnostic.observations" placeholder="Username" name="diagnostic.observations" required autofocus="" />
+  <br />
+
+  <input type="text" class="form-control" name="diagnostic.code" [(ngModel)]="diagnostic.code" placeholder="Password" required /> 
+  <div class="form-group">     
+  <br/>
+
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">Login</button>   
+</form>

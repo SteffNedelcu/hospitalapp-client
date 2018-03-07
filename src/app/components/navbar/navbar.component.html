@@ -1,0 +1,14 @@
+
+<div class="d-flex sticky-top flex-column flex-md-row align-items-center navbar-dark p-2 px-md-4 mb-3 bg-dark border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal navbar-brand">FIM Hospital</h5>
+    <span *ngIf="getDisplay()" class="p-2 text-white">Bun venit {{user.firstName}}</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dashbar" aria-controls="dashbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    <nav class="my-2 my-md-0 mr-md-3">
+            <!-- <a class="p-2 text-dark" href="#">Pricing</a> -->
+    </nav>
+    
+    <a class="btn btn-outline-primary text-white" (click)="logout()" href="#">Sign out</a>
+</div>
+

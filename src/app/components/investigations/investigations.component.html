@@ -1,0 +1,47 @@
+<div class="col-md-12" *ngIf="investigation">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+      <h1>Analiza <small>id: {{investigation.id}}</small></h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          </div>
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+          <span class="fa fa-calendar"></span>
+          Active
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <b>Cod de bare:</b> {{investigation.code}}<form action="" *ngIf="!investigation.code" (submit)="addCode()">
+            <div class="form-group" >
+               <input type="text" class="form-control" >
+            </div>
+        </form>
+        <b>Cod CIM:</b> {{investigation.codeCIM}} <br>
+        <b>Nume:</b> {{investigation.name}}<br>
+      </div>
+      <div class="col-md-6">
+          <b>Data solicitare:</b> 
+        {{investigation.dateRequest}}
+         <br>
+          <b>Data recoltare:</b> {{investigation.dateSampling}}<br>
+          <b>Data incepere prelucrare:</b> {{investigation.dateCheckin}}<br>
+          <b>Data finalizare:</b> {{investigation.dateCheckout}}<br>
+        </div>
+    </div>
+
+    <form action="" (submit)="edit()">
+        <div class="row mt-4" *ngIf="investigation.status ==1;">
+            <div class="col-md-12">
+                <h3>Observatii</h3>
+                <div class="form-group" >
+                    <textarea [(ngModel)]="investigation.observations" class="form-control" (blur)="edit()" name="observations" id="observations" cols="100" rows="10"></textarea>
+                </div>
+            </div>     
+        </div>
+    </form>
+    <form action="" (submit)="addFile()">
+        <input type="file" class="" >
+    </form>
+
+  </div>

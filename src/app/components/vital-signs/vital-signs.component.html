@@ -1,0 +1,105 @@
+<div class="col-md-12" *ngIf="vitalSigns">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+          <h1>Fisa Medicala : {{ id }} Curba febrila</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/fisa-medicala/{{id}}">  <span class="fa fa-bar-chart"></span> Inapoi</a>
+            </div>
+            <div class="btn-group mr-2">
+              <button class="btn btn-sm btn-outline-secondary" (click)="showAddVitalSignsForm()">  <span class="fa fa-bar-chart"></span> Adauga</button>
+            </div>
+          </div>
+  </div>
+
+  <div class="row" *ngIf="addVitalSignsForm">
+    <form action=""  (submit)="addVitals()">   
+        <div class="col-md-12 ">
+                <h4>Adauga semnele vitale</h4>                        
+        </div>
+        <div class="col-md-12 mt-4">
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <div class="row ">
+                        <label for="pulse" class="col-sm-6 col-form-label">Puls (BPM)</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" [(ngModel)]="newVitalSigns.pulse" name="pulse" id="pulse" placeholder="puls">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <div class="row ">
+                        <label for="temperature" class="col-sm-6 col-form-label">Temperatura</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" [(ngModel)]="newVitalSigns.temperature" name="temperature" id="temperature" placeholder="Teamperatura">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <div class="row ">
+                      <label for="respiratoryRate" class="col-sm-6 col-form-label">Rata respiratorie</label>
+                      <div class="col-sm-6">
+                          <input type="text" class="form-control" [(ngModel)]="newVitalSigns.respiratoryRate" name="respiratoryRate" id="respiratoryRate" placeholder="2">
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <div class="row ">
+                        <label for="bloodPreasureS" class="col-sm-6 col-form-label">Presiunea sistolica</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" [(ngModel)]="newVitalSigns.bloodPreasureS" name="bloodPreasureS" id="bloodPreasureS" placeholder="70">
+                        </div>
+                    </div>
+                  </div>
+                <div class="form-group col-md-2">
+                    <div class="row ">
+                        <label for="bloodPreasureD" class="col-sm-7 col-form-label">Presiunea diastolica</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" [(ngModel)]="newVitalSigns.bloodPreasureD" name="bloodPreasureD" id="bloodPreasureD" placeholder="130">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                      <div class="row ">
+                          <label for="weight" class="col-sm-7 col-form-label">Greutatea</label>
+                          <div class="col-sm-5">
+                              <input type="text" class="form-control" [(ngModel)]="newVitalSigns.weight" name="weight" id="weight" placeholder="Greutatea">
+                          </div>
+                      </div>
+                    </div>
+                <div class="form-group col-md-1">
+                  <div class="col-sm-12">
+                      <button class="btn btn-primary">Set</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </form>
+  </div>
+
+  
+</div>
+<div class="wrapper">
+  <h3>Puls</h3>
+  <canvas id="pulseChart"  width="900" height="380"></canvas>
+</div>
+  <div class="wrapper"> 
+      <h3>Temperatura</h3>
+    <canvas id="temperatureChart" width="900" height="380"></canvas> 
+  </div>
+  <div class="wrapper"> 
+      <h3>Presiunea arteriala</h3>
+    <canvas id="bloodPreasureChart" width="900" height="380"></canvas>
+  </div>
+  <div class="wrapper">
+      <h3>Rata resporatorie</h3>
+    <canvas id="respiratoryRateChart" width="900" height="380"></canvas>
+  </div>
+  <div class="wrapper">
+      <h3>Greutatea</h3>
+    <canvas id="weightChart" width="900" height="380"></canvas>
+  </div>
+   
+
+    
+    
+
