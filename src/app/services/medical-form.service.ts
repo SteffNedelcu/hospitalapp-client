@@ -43,6 +43,14 @@ export class MedicalFormService {
      {headers: headers, withCredentials : true})
       .map( res => res.json());
   }
+  editStatus(medicalForm: MedicalForm) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    console.log(medicalForm);
+    return this.http.put('http://localhost:8080/medical-forms/' + medicalForm.id + '/change-status', JSON.stringify(medicalForm),
+     {headers: headers, withCredentials : true})
+      .map( res => res.json());
+  }
   addBed(id: number , bed: Bed) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -62,7 +70,6 @@ export class MedicalFormService {
   addTreatment(id: number , treatment: Treatment) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    console.log(treatment);
     return this.http.post('http://localhost:8080/medical-forms/' + id + '/treatment/add', JSON.stringify(treatment),
      {headers: headers, withCredentials : true})
       .map( res => res.json());
@@ -83,8 +90,15 @@ export class MedicalFormService {
      {headers: headers, withCredentials : true})
       .map( res => res.json());
   }
-  getUserActiveMedicalForms() {
-    const url = 'http://localhost:8080/medical-forms/user/active';
+  getUserMedicalForms(status) {
+    const url = 'http://localhost:8080/medical-forms/user/' + status;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(url, {headers: headers, withCredentials : true}).map(res => res.json()
+     );
+  }
+  getUserMedicalFormsPacients(status) {
+    const url = 'http://localhost:8080/medical-forms/user/' + status + '/pacients';
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.get(url, {headers: headers, withCredentials : true}).map(res => res.json()
@@ -97,5 +111,34 @@ export class MedicalFormService {
     return this.http.delete(url, {headers: headers, withCredentials : true}).map(res => res.json()
      );
   }
-  
+  deleteTreatment(id) {
+    const url = 'http://localhost:8080/medical-forms/delete/treatment/' + id;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete(url, {headers: headers, withCredentials : true}).map(res => res.json()
+     );
+  }
+  deleteInvestigation(id) {
+    const url = 'http://localhost:8080/medical-forms/delete/investigation/' + id;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete(url, {headers: headers, withCredentials : true}).map(res => res.json()
+     );
+  }
+  administrateTratment(id: number, treatment: Treatment) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    console.log(treatment);
+    return this.http.post('http://localhost:8080/medical-forms/' + id + '/treatment-administration/add', JSON.stringify(treatment),
+     {headers: headers, withCredentials : true})
+      .map( res => res.json());
+  }
+  changeTreatmentStatus(id: number, treatment: Treatment) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    console.log(treatment);
+    return this.http.put('http://localhost:8080/medical-forms/' + id + '/change/treatment', JSON.stringify(treatment),
+     {headers: headers, withCredentials : true})
+      .map( res => res.json());
+  }
 }

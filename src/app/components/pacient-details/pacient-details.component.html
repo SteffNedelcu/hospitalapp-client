@@ -33,6 +33,7 @@
                 <th>Cod</th>
                 <th>Spital</th>
                 <th>data</th>
+                <th>Diagnostic</th>
                 <th></th>
               </tr>
             </thead>
@@ -42,6 +43,7 @@
                 <td>{{medicalForm.code}}</td>
                 <td>{{medicalForm.hospitalInfo}}</td>
                 <td>{{medicalForm.dateCheckUp}}</td>
+                <td><ul class="list-inline"> <li *ngFor="let diagnostic of medicalForm.diagnosticList" class="list-inline-item"> {{diagnostic.name}} </li> </ul></td>
                 <td><a routerLink="/fisa-medicala/{{medicalForm.id}}" class="btn btn-primary"> <i class="fa fa-eye"></i> Vezi</a></td>
               </tr>
 
@@ -53,8 +55,8 @@
       <h4>Nu exista fise medicale in sistem</h4>
     </ng-template>
   </div>
-  <div *ngIf="activeMedicalForms != null" class="row margin-top-25">        
-    <div *ngIf="activeMedicalForms == 0; else viewMedicalForm" class="row text-center">
+  <div *ngIf="activeMedicalForms != null" class="row margin-top-25 mb-4">        
+    <div *ngIf="activeMedicalForms == 0; else viewMedicalForm" class="container-fluid text-center">
       <button (click)="addMedicalForm()" class="btn btn-primary btn-lg">Adauga Fisa Medicala</button>
     </div>
     <ng-template #viewMedicalForm>

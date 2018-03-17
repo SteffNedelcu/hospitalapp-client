@@ -4,23 +4,49 @@
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
           </div>
-        <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-          <span class="fa fa-calendar"></span>
-          Active
-        </button>
+          <div class="dropdown show">
+            <a class="btn btn-default dropdown-toggle" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" >
+              <span class="fa fa-calendar"></span> Status
+            </a>
+          
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Consulturi</a>
+              <a class="dropdown-item" href="#">Internari</a>
+              <a class="dropdown-item" href="#">Inchise</a>
+              <a class="dropdown-item" href="#">Active</a>
+              <a class="dropdown-item" href="#">Toate</a>
+            </div>
+          </div>
       </div>
+
     </div>
     <h3>Fise medicale</h3>
     <div *ngIf="medicalForms" class="row">
         <div *ngIf="medicalForms.length > 0; else noMedicalForms" class="col-md-12">
-            
-          <div *ngFor="let medicalForm of medicalForms" class="row mt-2" style="border: 1px solid #ccc; border-radius:0.2em; padding:5px;">
-            <div class="col-md-1">{{medicalForm.id}}</div>
-            <div class="col-md-4">{{medicalForm.code}}</div>
-            <div class="col-md-3">{{medicalForm.hospitalInfo}}</div>
-            <div class="col-md-2">{{medicalForm.date_check_up}}</div>
-            <div class="col-md-2 text-center" ><a routerLink="/fisa-medicala/{{medicalForm.id}}" class="btn btn-primary">Vezi</a></div>                 
-          </div>
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cod</th>
+                <th>data</th>
+                <th>Pacient</th>
+                <th>Diagnostic</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let medicalForm of medicalForms">
+                <th scope="row">{{medicalForm.id}}</th>
+                <td>{{medicalForm.code}}</td>
+                <td>{{medicalForm.dateCheckUp}}</td>
+                <td><span *ngIf="pacients && pacients[medicalForm.id]">{{pacients[medicalForm.id].lastName}} {{pacients[medicalForm.id].firstName}}</span></td>
+                <td><ul class="list-inline"> <li *ngFor="let diagnostic of medicalForm.diagnosticList" class="list-inline-item"> {{diagnostic.name}} </li> </ul></td>
+                <td><a routerLink="/fisa-medicala/{{medicalForm.id}}" class="btn btn-primary"> <i class="fa fa-eye"></i> Vezi</a></td>
+              </tr>
+
+            </tbody>
+          </table>
+
         </div>
         <ng-template #noMedicalForms>
           <h4>Nu exista fise medicale in sistem</h4>

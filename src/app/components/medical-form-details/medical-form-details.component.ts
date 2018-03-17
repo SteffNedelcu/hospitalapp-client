@@ -108,7 +108,9 @@ export class MedicalFormDetailsComponent implements OnInit {
 
     console.log(bed);
     this.medicalFormService.addBed(this.medicalForm.id, bed).subscribe(reBed => {
-
+      this._flashMessagesService.show('Pacientul a fost repartizat!', {cssClass: 'alert-success', timeout: 5000 });
+      this.bedPacintList.push(reBed);
+      this.getActiveBed();
      console.log(reBed);
     });
   }
@@ -123,7 +125,6 @@ export class MedicalFormDetailsComponent implements OnInit {
     };
     this.medicalFormService.edit(this.newMedicalForm).subscribe(medicalForm => {
       this.medicalForm = medicalForm;
-       console.log(medicalForm);
        this._flashMessagesService.show('Fisa medicata a fost actualizata!', {cssClass: 'alert-success', timeout: 5000 });
     });
   }
@@ -152,7 +153,8 @@ export class MedicalFormDetailsComponent implements OnInit {
       allergy: 0};
   }
   addTreatment() {
-    console.log('addTreatment');
+
+    this.newTreatment.vaccine = (this.newTreatment.vaccine) ? 1 : 0 ;
     console.log(this.newTreatment);
     this.medicalFormService.addTreatment(this.medicalForm.id, this.newTreatment).subscribe(treatment => {
       this.medicalForm.treatmentList.unshift(treatment);
@@ -186,22 +188,15 @@ export class MedicalFormDetailsComponent implements OnInit {
     return this.pacient.statusAsigurat ? true : false ;
   }
   getListText(obj) {
-    const names = obj.map( e => (e.status === 1) ? e.code : null );
+    const names = obj.map( e => (e.status === 1) ? e.name + ' (' + e.codeCIM + ')' : null );
     return (names.length) ? names.join(', ') : ' - ';
-  }
-  deleteTreatment() {
-
-  }
-  deleteInvestigation() {
-
   }
   isActive(e) {
     const result = e.status === 1 ? true : false;
-    console.log(e.name + ' ' + e.status + ' ' + result);
     return result;
   }
   deleteDiagnostic(id) {
-    if (confirm(' Are you sure to delete ' + id)) {
+    if (confirm('Esti sigur ca vrei sa stergi diagnosticul?')) {
       console.log('delete diagnostic');
       this.medicalFormService.deleteDiagnostic(id).subscribe(() => {
         this._flashMessagesService.show('Diagnosticul a fost sters!', {cssClass: 'alert-success', timeout: 5000 });
@@ -213,7 +208,88 @@ export class MedicalFormDetailsComponent implements OnInit {
       }
     }
   }
-  adminstrateTreatment(id) {
-    console.log('test adaugare tratament');
+  deleteTreatment(id) {
+    if (confirm(' Esti sigur ca vrei sa stergi tratamentul? ')) {
+      console.log('delete treatment');
+      this.medicalFormService.deleteTreatment(id).subscribe((res) => {
+        if ( res === true) {
+          this._flashMessagesService.show('Traramentul a fost sters!', {cssClass: 'alert-success', timeout: 5000 });
+          for (let i = 0; i < this.medicalForm.treatmentList.length; i++) {
+            if (this.medicalForm.treatmentList[i].id === id) {
+              this.medicalForm.treatmentList.splice(i, 1);
+            }
+          }
+        }else {
+          this._flashMessagesService.show('Traramentul nu a fost sters!', {cssClass: 'alert-danger', timeout: 5000 });
+        }
+      });
+    }
+  }
+  deleteInvestigation(id) {
+    if (confirm('Esti sigur ca vrei sa stergi analiza? ')) {
+      this.medicalFormService.deleteInvestigation(id).subscribe((res) => {
+        console.log(res);
+        this._flashMessagesService.show('Analiza a fost stersa!', {cssClass: 'alert-success', timeout: 5000 });
+      });
+      for (let i = 0; i < this.medicalForm.investigationList.length; i++) {
+        if (this.medicalForm.investigationList[i].id === id) {
+          this.medicalForm.investigationList.splice(i, 1);
+        }
+      }
+    }
+  }
+  adminstrateTreatment(treatment) {
+    const newTreatment = { id: treatment.id, code: treatment.code };
+    this.medicalFormService.administrateTratment(this.medicalForm.id, newTreatment).subscribe(treatmentLog => {
+
+       console.log(treatmentLog);
+       this._flashMessagesService.show('Tratamentul a fost adaugat!', {cssClass: 'alert-success', timeout: 5000 });
+    });
+  }
+  changeTreatmentStatus(treatment) {
+    const newTreatment = { id: treatment.id, code: treatment.code, status: (treatment.status === 1) ? 0 : 1  };
+    this.medicalFormService.changeTreatmentStatus(this.medicalForm.id, newTreatment).subscribe(reTreatment => {
+      for (let i = 0; i < this.medicalForm.treatmentList.length; i++) {
+        if (this.medicalForm.treatmentList[i].id === reTreatment.id) {
+          this.medicalForm.treatmentList[i].status = reTreatment.status;
+        }
+      }
+       this._flashMessagesService.show('Starea tratamentului a fost modificata!', {cssClass: 'alert-success', timeout: 5000 });
+    });
+  }
+  changeStatus(status) {
+    event.preventDefault();
+    this.newMedicalForm = {
+      id: this.medicalForm.id,
+      status: status
+    };
+    this.medicalFormService.editStatus(this.newMedicalForm).subscribe(medicalForm => {
+      this.medicalForm = medicalForm;
+      // console.log(medicalForm);
+       this._flashMessagesService.show('Fisa medicata a fost actualizata!', {cssClass: 'alert-success', timeout: 5000 });
+       if (medicalForm.status === 2) {
+        this._flashMessagesService.show('Repartizeaza pacientul intr-un pat!', {cssClass: 'alert-danger', timeout: 5000 });
+       }
+    });
+  }
+  getStatusText(status) {
+      switch (status) {
+        case 1: return 'Fisa se prezenta ';
+        case 2: return 'Fisa se internare';
+        case 3: return ' Externat ';
+        default: return ' none ';
+      }
+  }
+  getYesNo(value) {
+    return (value === 1) ? 'Da' : 'No';
+  }
+  investigationStatus(status) {
+    switch (status) {
+      case 1: return 'Cerere trimisa';
+      case 2: return 'Recoltat';
+      case 3: return 'Procesare';
+      case 4: return 'Finalizata';
+      default: return ' none ';
+    }
   }
 }

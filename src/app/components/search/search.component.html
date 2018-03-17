@@ -1,8 +1,32 @@
 
 
-<div>
+<div class="search-form">
 
   <form action="" (submit)="submit()">
-    <input type="text" class="form-control form-control-dark w-100" name="term" [(ngModel)]="term" placeholder="CNP">
+    <input type="text" class="form-control form-control-dark w-100" name="term" [(ngModel)]="term" placeholder="CNP sau nume">
   </form>
+</div>
+
+<div *ngIf="pacientList" class="mt-4">
+  <table class="table table-sm table-hover">
+    <thead>
+      <tr>
+        <th>CNP</th>
+        <th>Nume</th>
+        <th>Sex</th>
+        <th>Data nasterii</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pacient of pacientList">
+        <th scope="row">{{pacient.cnp}}</th>
+        <td>{{pacient.firstName}} {{pacient.lastName}}</td>
+        <td>{{pacient.sex}}</td>
+        <td>{{pacient.birthdate}}</td>
+         <td align="right"><a routerLink="/pacient/{{pacient.cnp}}" class="btn btn-primary"> <i class="fa fa-eye"></i> Vezi</a></td>
+      </tr>
+
+    </tbody>
+  </table>
 </div>

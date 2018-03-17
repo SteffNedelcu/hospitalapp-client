@@ -26,6 +26,7 @@ export class PacientDetailsComponent implements OnInit {
     this.pacientService.getOne(this.id).subscribe(pacient => { this.pacient = pacient; console.log(this.pacient); } );
     this.pacientService.getOneMedicalForms(this.id).subscribe(medicalForms => {
       this.medicalForms = medicalForms;
+      console.log(this.medicalForms);
     }  );
     this.pacientService.getOneCurrentMedicalForm(this.id).subscribe(activeMedicalForms => {this.activeMedicalForms = activeMedicalForms;
 
@@ -41,8 +42,8 @@ export class PacientDetailsComponent implements OnInit {
     return this.pacient.statusAsigurat ? true : false ;
   }
   getListText(obj) {
-      const names = obj.map( e => (e.status === 1) ? e.code : null );
-      return (names.length) ? names.join(', ') : ' - ';
+    const names = obj.map( e => (e.status === 1) ? e.name + ' (' + e.codeCIM + ')' : null );
+    return (names.length) ? names.join(', ') : ' - ';
   }
 
 }

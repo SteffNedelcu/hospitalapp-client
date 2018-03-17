@@ -12,11 +12,11 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <b>Cod de bare:</b> {{investigation.code}}<form action="" *ngIf="!investigation.code" (submit)="addCode()">
-            <div class="form-group" >
-               <input type="text" class="form-control" >
+        <b>Cod de bare:</b> <span *ngIf="hasCode()">{{investigation.code}}</span> <br>
+            <div class="form-group" *ngIf="!hasCode()">
+               <input type="text" class="form-control" [(ngModel)]="investigation.code" name="code" (blur)="editCode()">
             </div>
-        </form>
+     
         <b>Cod CIM:</b> {{investigation.codeCIM}} <br>
         <b>Nume:</b> {{investigation.name}}<br>
       </div>
@@ -31,7 +31,7 @@
     </div>
 
     <form action="" (submit)="edit()">
-        <div class="row mt-4" *ngIf="investigation.status ==1;">
+        <div class="row mt-4">
             <div class="col-md-12">
                 <h3>Observatii</h3>
                 <div class="form-group" >
@@ -40,8 +40,28 @@
             </div>     
         </div>
     </form>
-    <form action="" (submit)="addFile()">
-        <input type="file" class="" >
-    </form>
 
+     <div class="row">
+       <a href="http://localhost:8080/investigations/files/{{investigation.fileName}}"
+       class="btn btn-primary float-center" ><i class="fa fa-file"></i> {{investigation.fileName}}</a>
+     </div>
+    <div class="row text-center mt-4">
+        <div *ngIf="currentFileUpload" class="progress">
+            <div class="progress-bar progress-bar-info progress-bar-striped"
+              role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+              aria-valuemin="0" aria-valuemax="100"
+              [ngStyle]="{width:progress.percentage+'%'}">
+              {{progress.percentage}}%</div>
+          </div>
+        <label  for="upload-file-input" class="btn btn-custom-upload">
+            <i class="fa fa-cloud-upload"></i> 
+          </label>
+          <input type="file" id="upload-file-input" (change)="selectFile($event)">
+       
+    </div>
+    <div class="text-center mt-3" *ngIf="selectedFiles"><h4>{{fileName}}</h4></div>
+    <div class="row text-center mt-3">
+      <button class="btn btn-success float-center" [disabled]="!selectedFiles"
+        (click)="upload()">Upload</button>
+    </div>
   </div>
