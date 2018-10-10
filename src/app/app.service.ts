@@ -10,6 +10,7 @@ import { User } from './models/User';
 export class AppService {
   authenticated: boolean;
   checked = false;
+  toogled = false;
   user: User;
 
   constructor(private http: HttpClient, private router: Router) {
@@ -66,6 +67,8 @@ export class AppService {
     const url = 'http://localhost:8080/logout';
     return this.http.get(url, { withCredentials: true });
   }
-
+  toggle() {
+    this.toogled = (this.toogled === true ) ? false : true;
+  }
 
 }

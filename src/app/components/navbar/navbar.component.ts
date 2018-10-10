@@ -30,5 +30,7 @@ export class NavbarComponent implements OnInit {
       }
     ngOnInit() {
     }
-
+    toggleDashbar() {
+        this.app.toggle();
+    }
 }

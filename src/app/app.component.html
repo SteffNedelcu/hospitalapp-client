@@ -4,7 +4,7 @@
   <div class="row">
     <app-dashbar ></app-dashbar>
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <main role="main" class="pt-3 px-4 page-wrapper"  [ngClass]="{'expanded':isToggled() }" >
       <div class="fixed-top m-3">
           <flash-messages></flash-messages>
       </div>

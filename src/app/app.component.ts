@@ -16,16 +16,18 @@ export class AppComponent {
   getDisplay() {
     return this.app.authenticated;
   }
-  isLoginPage(){
+  isLoginPage() {
     const res = (this.router.url === '/login') ? true : false;
     return res;
+  }
+  isToggled() {
+    return this.app.toogled;
   }
   logout() {
     this.app.logout().subscribe(
       res => {
         location.reload();
         this.router.navigateByUrl('/login');
- 
      }, (err) => {this.router.navigateByUrl('/login');   }
     );
   }

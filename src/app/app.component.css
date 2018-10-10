@@ -66,3 +66,21 @@ a{
 .heading-col > p {
     margin-bottom: 0.5em;
 }
+.page-wrapper{
+    width: 100%;
+    margin-left:250px; 
+
+}
+.expanded{
+    margin-left:0;  
+    -webkit-transition: margin-left 0.5s; /* Safari */
+    transition: margin-left 0.5s;
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+}
+@media (max-width: 768px){
+    .page-wrapper{
+        width: 100%;
+        margin-left:0; 
+    }
+}

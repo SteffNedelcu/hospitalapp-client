@@ -28,8 +28,16 @@ export class DashboardComponent implements OnInit {
         console.log(this.pacients);
       });
   }
-  authenticated() { return this.app.authenticated; }
   ngOnInit() {
   }
-
+  authenticated() { return this.app.authenticated; }
+  changeStatus(status) {
+    this.status = status;
+    this.medicalFormService.getUserMedicalForms(this.status).subscribe(medicalForms => { this.medicalForms = medicalForms;
+      console.log(this.medicalForms);
+    });
+    this.medicalFormService.getUserMedicalFormsPacients(this.status).subscribe(pacients => { this.pacients = pacients;
+      console.log(this.pacients);
+    });
+  }
 }

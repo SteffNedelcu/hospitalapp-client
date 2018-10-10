@@ -8,9 +8,9 @@ export class DiagnosticsService {
 
   constructor (private http: Http) {}
 
-  addDiagnostic(value) { 
-    let url = 'http://localhost:8080/pacient/1940508420048/diagnostics/add';
-    let params = JSON.stringify(value);
+  addDiagnostic(value) {
+    const url = 'http://localhost:8080/pacient/1940508420048/diagnostics/add';
+    const params = JSON.stringify(value);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     console.log(params);

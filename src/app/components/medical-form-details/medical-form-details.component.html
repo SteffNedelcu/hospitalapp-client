@@ -2,6 +2,9 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1>Fisa Medicala : {{ medicalForm.id }} - {{ getStatusText(medicalForm.status) }}</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2" *ngIf="pacient">
+                            <a class="btn btn-sm btn-outline-secondary" routerLink="/pacient/{{pacient.cnp }}">  <span class="fa fa-user"></span> Pacint Info</a>
+                          </div>
                     <div class="btn-group mr-2">
                       <a class="btn btn-sm btn-outline-secondary" routerLink="/fisa-medicala/{{id}}/vital-signs">  <span class="fa fa-bar-chart"></span> Curba Febrila</a>
                     </div>
@@ -66,7 +69,9 @@
         <div class="col-md-12">
             <h3>Observatii</h3>
             <div class="form-group" >
-                {{medicalForm.observationsCheckOut}}
+                <textarea [(ngModel)]="medicalForm.observationsCheckOut" id="" class="form-control" cols="100" rows="10" disabled>
+
+              </textarea>
             </div>
 
         </div>            
